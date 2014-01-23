@@ -1,0 +1,114 @@
+package it.bioko.http.scenario;
+
+import it.bioko.system.KILL_ME.commons.GenericFieldNames;
+import it.bioko.system.KILL_ME.commons.HttpMethod;
+import it.bioko.utils.domain.DomainEntity;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+public class OnlyGetScenarioFactory {
+
+	public static final String ONLY_GET = "only-get" + "/";
+	
+	public static List<Object[]> adaptToOnlyGet(List<Object[]> list) throws Exception {
+		List<Object[]> onlyGetList = new ArrayList<Object[]>(list.size());
+		for (Object[] array : list) {
+			onlyGetList.add(new Object[] { array[0] + " " + ONLY_GET, adaptToOnlyGet((Scenario) array[1]) });
+		}
+		return onlyGetList;
+	}
+	
+	private static Scenario adaptToOnlyGet(Scenario collector) throws Exception {
+		Scenario onlyGetCollector = new Scenario(collector.scenarioName());
+		for (Entry<String, ScenarioStep> anEntry : collector.scenarioSteps()) {
+			ScenarioStep restScenario = anEntry.getValue();
+			if (restScenario instanceof HttpScenarioStep) {
+				onlyGetCollector.addScenarioStep(anEntry.getKey(), adaptToOnlyGet((HttpScenarioStep)restScenario));
+			} else {
+				onlyGetCollector.addScenarioStep(anEntry.getKey(), restScenario);
+			}
+		}
+		
+		return onlyGetCollector;
+	}
+
+	private static HttpScenarioStep adaptToOnlyGet(HttpScenarioStep restScenario) throws Exception {
+				
+		HashMap<String, String> parameters = new HashMap<String, String>(restScenario._parameters);
+		parameters.putAll(restScenario._headers);
+		
+		String[] restUrlSplit = restScenario._partialRestURL.split("/");
+		String entityHyphened;
+		if (restUrlSplit[restUrlSplit.length - 1].matches("\\d+")) {
+			entityHyphened = (restUrlSplit[restUrlSplit.length - 2]);
+			parameters.put(DomainEntity.ID, restUrlSplit[restUrlSplit.length - 1]);
+		} else {
+			entityHyphened = (restUrlSplit[restUrlSplit.length - 1]);
+		}
+		
+		String command = new StringBuilder(). 
+				append(restScenario._httpMethod).
+				append('_').
+				append(entityHyphened).
+				toString();
+		parameters.put(GenericFieldNames.COMMAND, command);
+		
+		if (restScenario._requestBodyJson != null && !restScenario._requestBodyJson.isEmpty()) {
+			parameters.putAll(parseBody(restScenario._requestBodyJson));
+		}
+
+		HttpScenarioStep onlyGetScenario = new HttpScenarioStep(ONLY_GET, HttpMethod.GET.name(), null,
+				parameters, null, restScenario._expectedHttpStatusCode, restScenario._expectedJsonBodyMatcher);
+		
+		return onlyGetScenario;
+	}
+	
+	private static Map<String, String> parseBody(String requestBodyJson) throws Exception {		
+		JSONParser parser = new JSONParser();
+		JSONObject object = (JSONObject) parser.parse(requestBodyJson);
+		
+		return jsonToMap(object); 
+	}
+
+	public static Map<String, String> jsonToMap(JSONObject object) {
+		Map<String, String> bodyMap = new HashMap<String, String>();
+		for (Object aKey : object.keySet()) {
+			Object aValue = object.get(aKey);
+			if (aValue instanceof String) {
+				bodyMap.put((String) aKey,(String) aValue);
+			} else if (aValue instanceof JSONObject) {
+				for (Entry<String, String> anEntry : jsonToMap((JSONObject) aValue).entrySet()) {
+					bodyMap.put(aKey + "." + anEntry.getKey(), anEntry.getValue());
+				}
+			} else if (aValue instanceof DomainEntity) {
+				DomainEntity entity = (DomainEntity) aValue;
+				for (String anEntityField : entity.fields().keys()) {
+					bodyMap.put(aKey + "." + anEntityField, entity.get(anEntityField));
+				}
+			} else if (aValue instanceof JSONArray) {
+				JSONArray anArray = (JSONArray) aValue;
+				if (anArray.get(0) instanceof String) {
+					for (int i = 0; i < anArray.size(); i++) {
+						bodyMap.put(aKey + "[" + i + "]", (String) anArray.get(i));
+					}
+				} else if (anArray.get(0) instanceof JSONObject) {
+					for (int i = 0; i < anArray.size(); i++) {
+						for (Entry<String, String> anEntry : jsonToMap((JSONObject) anArray.get(i)).entrySet()) {
+							bodyMap.put(aKey + "[" + i + "]." + anEntry.getKey(), anEntry.getValue());
+						}
+					}
+				}
+			}
+		}
+		return bodyMap;
+	}
+	
+}
