@@ -27,9 +27,15 @@
 
 package org.biokoframework.http.rest;
 
+import java.util.EnumSet;
+
+import javax.servlet.DispatcherType;
+
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 
+import com.google.inject.servlet.GuiceFilter;
 import com.google.inject.servlet.GuiceServletContextListener;
 
 public abstract class WebAppTest {
@@ -45,7 +51,10 @@ public abstract class WebAppTest {
 		_server = new Server(port);
 		
 		ServletContextHandler handler = new ServletContextHandler(_server, "/", ServletContextHandler.SESSIONS);
+		handler.addFilter(GuiceFilter.class, "/*", EnumSet.allOf(DispatcherType.class));
 		handler.addEventListener(getServletConfig());
+		handler.addServlet(DefaultServlet.class, "/");
+
 	}
 
 	public int getPort() {
