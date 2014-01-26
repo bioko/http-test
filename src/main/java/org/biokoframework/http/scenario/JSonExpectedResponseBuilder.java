@@ -38,12 +38,12 @@ import java.util.Map;
 
 import org.biokoframework.system.KILL_ME.exception.SystemException;
 import org.biokoframework.system.command.CommandException;
-import org.biokoframework.system.command.ValidationException;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.EntityBuilder;
 import org.biokoframework.utils.domain.ErrorEntity;
 import org.biokoframework.utils.domain.reflection.DomainEntityReflection;
+import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.fields.Fields;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
