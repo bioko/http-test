@@ -27,10 +27,6 @@
 
 package org.biokoframework.http.scenario;
 
-import org.biokoframework.http.HttpMethodEnum;
-import org.biokoframework.http.matcher.SubstituteBothJsonKeyMatcher;
-import org.biokoframework.http.rest.exception.HttpError;
-
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,6 +34,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.biokoframework.http.HttpMethodEnum;
+import org.biokoframework.http.matcher.SubstituteBothJsonKeyMatcher;
+import org.biokoframework.http.rest.exception.HttpError;
 import org.biokoframework.system.entity.EntityClassNameTranslator;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.EntityBuilder;

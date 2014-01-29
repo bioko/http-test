@@ -29,14 +29,13 @@ package org.biokoframework.http.scenario.parametrized;
 
 import static org.biokoframework.utils.matcher.Matchers.anyString;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.biokoframework.http.rest.exception.HttpError;
 import org.biokoframework.http.scenario.HttpScenarioFactory;
 import org.biokoframework.http.scenario.JSonExpectedResponseBuilder;
 import org.biokoframework.http.scenario.JSonRequestFactory;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import org.biokoframework.system.entity.EntityClassNameTranslator;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.EntityBuilder;
