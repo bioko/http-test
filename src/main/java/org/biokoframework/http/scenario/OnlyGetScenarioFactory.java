@@ -117,7 +117,7 @@ public class OnlyGetScenarioFactory {
 			} else if (aValue instanceof DomainEntity) {
 				DomainEntity entity = (DomainEntity) aValue;
 				for (String anEntityField : entity.fields().keys()) {
-					bodyMap.put(aKey + "." + anEntityField, entity.get(anEntityField));
+					bodyMap.put(aKey + "." + anEntityField, entity.get(anEntityField).toString());
 				}
 			} else if (aValue instanceof JSONArray) {
 				JSONArray anArray = (JSONArray) aValue;
