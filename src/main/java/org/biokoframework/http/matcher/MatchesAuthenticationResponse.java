@@ -39,7 +39,7 @@ import org.hamcrest.TypeSafeMatcher;
 
 public class MatchesAuthenticationResponse extends TypeSafeMatcher<String> {
 
-	private static final String EXPECTED_RESPONSE_PATTERN = "^\\[\\{\"authTokenExpire\":\"\\d+\",(\"roles\":\"[a-z]+?\",)?\"authToken\":\"([\\da-f\\-]+)\"\\}\\]$";
+	private static final String EXPECTED_RESPONSE_PATTERN = "^\\[\\{\"authTokenExpire\":\"\\d+\",(\"roles\":\"[a-z|]+?\",)?\"authToken\":\"([\\da-f\\-]+)\"\\}\\]$";
 	
 	private Matcher<String> _actualMatcher = matchesPattern(EXPECTED_RESPONSE_PATTERN);
 	private final Map<String, String> _tokenMap;
