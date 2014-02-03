@@ -228,7 +228,7 @@ public class HttpScenarioFactory<T extends DomainEntity> {
 		
 		JSonRequestFactory<T> jsonRequestFactory = new JSonRequestFactory<T>().createEntity(entityClass);
 		String newEntityRequest = jsonRequestFactory.buildNewEntityAsJSON();
-		HttpError alreadyExisting = JSonExpectedResponseBuilder.entityAlreadyExisting(entityClass, new Fields().fromJson(newEntityRequest));
+		HttpError alreadyExisting = JSonExpectedResponseBuilder.entityAlreadyExisting(entityClass, Fields.fromJson(newEntityRequest));
 		
 		scenarioCollector.addScenarioStep("first post " + entityName, postSuccessful(restURL, null, null, newEntityRequest, Matchers.equalTo(JSonExpectedResponseBuilder.existingEntity(entityClass, _startingId))));
 		scenarioCollector.addScenarioStep("second post " + entityName, postFailed(restURL, null, null, newEntityRequest, alreadyExisting.status(), Matchers.equalTo(JSONValue.toJSONString(alreadyExisting.body()))));
