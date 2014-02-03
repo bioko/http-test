@@ -57,7 +57,7 @@ public abstract class AbstractSystemServletInterfaceTest extends WebAppTest {
 	}
 	
 	protected Fields prepareResponse(List<DomainEntity> entitiesList) {
-	    Fields entities = Fields.empty();
+	    Fields entities = new Fields();
 	    entities.put("RESPONSE", entitiesList);
 		return entities;
 	}
