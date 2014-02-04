@@ -54,7 +54,6 @@ public class CrudScenariosParametrizedFactory {
 		HttpScenarioFactory<T> scenarioFactory = new HttpScenarioFactory<T>(startingId);
 		String entityName = anEntityClass.getSimpleName();
 		
-		@SuppressWarnings("unchecked")
 		EntityBuilder<T> entityBuilder = (EntityBuilder<T>) anEntityBuilderClass.newInstance(); 
 		
 		HashMap<String, String> queryString = null;
