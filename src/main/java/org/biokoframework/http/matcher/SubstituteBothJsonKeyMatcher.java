@@ -63,6 +63,7 @@ public class SubstituteBothJsonKeyMatcher extends TypeSafeMatcher<String> {
 		return _expectedJson.equals(_actualJson);
 	}
 
+	@SuppressWarnings("unchecked")
 	private void putKnownIdToBoth(String actualJson, String expectedJson) {
 		try {
 			JSONArray actualJsonArray = (JSONArray) new JSONParser().parse(actualJson);
