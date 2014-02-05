@@ -148,7 +148,7 @@ public class HttpScenarioFactory<T extends DomainEntity> {
 		return scenarioCollector;
 	}
 
-	public Scenario readAllScenarioCollector(Class<T> entityClass, Map<String, String> anUpdateEntityParamMap, HashMap<String, String> queryString) throws Exception {
+	public Scenario readAllScenarioCollector(Class<T> entityClass, Map<String, Object> anUpdateEntityParamMap, HashMap<String, String> queryString) throws Exception {
 		String entityName = EntityClassNameTranslator.toHyphened(entityClass.getSimpleName());
 		String restURL = entityName + "/";
 		Scenario scenarioCollector = new Scenario("Read " + entityName + " (POST(1), POST(2), GET) successful");
@@ -179,7 +179,7 @@ public class HttpScenarioFactory<T extends DomainEntity> {
 		return scenarioCollector;
 	}
 
-	public Object updateScenarioCollector(Class<T> entityClass, Map<String, String> anUpdateEntityParamMap, HashMap<String, String> queryString) throws Exception {
+	public Object updateScenarioCollector(Class<T> entityClass, Map<String, Object> anUpdateEntityMap, HashMap<String, String> queryString) throws Exception {
 		String entityName = EntityClassNameTranslator.toHyphened(entityClass.getSimpleName());
 		String restURL = entityName + "/";
 		Scenario scenarioCollector = new Scenario("Update " + entityName + " (POST, PUT, GET) successful");
@@ -189,7 +189,7 @@ public class HttpScenarioFactory<T extends DomainEntity> {
 		String newContactRequest = jsonRequestFactory.buildNewEntityAsJSON();
 		scenarioCollector.addScenarioStep("post " + entityName, postSuccessful(restURL, null, null, newContactRequest, Matchers.equalTo(JSonExpectedResponseBuilder.existingEntity(entityClass, _startingId))));
 		
-		JSonRequestFactory<T> updateRequestFactory = updateExistingEntity(anUpdateEntityParamMap, jsonRequestFactory);
+		JSonRequestFactory<T> updateRequestFactory = updateExistingEntity(anUpdateEntityMap, jsonRequestFactory);
 		updateRequestFactory.setId(_startingId);
 		String updateContactRequest = updateRequestFactory.buildExistingEntityAsJSON();
 		
@@ -198,8 +198,8 @@ public class HttpScenarioFactory<T extends DomainEntity> {
 		return scenarioCollector;
 	}
 
-	private JSonRequestFactory<T> updateExistingEntity(Map<String, String> anUpdateEntityParamMap, JSonRequestFactory<T> jsonRequestFactory) throws Exception {
-		for (Entry<String, String> eachParam : anUpdateEntityParamMap.entrySet()) {
+	private JSonRequestFactory<T> updateExistingEntity(Map<String, Object> anUpdateEntityParamMap, JSonRequestFactory<T> jsonRequestFactory) throws Exception {
+		for (Entry<String, Object> eachParam : anUpdateEntityParamMap.entrySet()) {
 			jsonRequestFactory.setEntityParam(eachParam.getKey(), eachParam.getValue());			
 		}
 		return jsonRequestFactory;
@@ -241,7 +241,7 @@ public class HttpScenarioFactory<T extends DomainEntity> {
 		return bodyExcludingIdMatcher;
 	}
 	
-	public Scenario readAllFilteredScenarioCollector(Class<T> entityClass, Map<String, String> anUpdateEntityParamMap, HashMap<String, String> queryString) throws Exception {
+	public Scenario readAllFilteredScenarioCollector(Class<T> entityClass, Map<String, Object> anUpdateEntityParamMap, HashMap<String, String> queryString) throws Exception {
 		String entityName = EntityClassNameTranslator.toHyphened(entityClass.getSimpleName());
 		String restURL = entityName + "/";
 		
@@ -254,8 +254,6 @@ public class HttpScenarioFactory<T extends DomainEntity> {
 		String entity1aId = _startingId;		
 		jsonRequestFactory.setId(entity1aId);
 		T entity1aExisting = jsonRequestFactory.buildExistingEntity();
-		String originalValue = entity1aExisting.get(changedFieldName);
-		
 		
 		scenarioCollector.addScenarioStep("post 1a " + entityName, postSuccessful(restURL, null, null, 
 				jsonRequestFactory.buildNewEntityAsJSON(), Matchers.equalTo("["+jsonRequestFactory.buildExistingEntityAsJSON()+"]")));
@@ -266,7 +264,7 @@ public class HttpScenarioFactory<T extends DomainEntity> {
 				jsonRequestFactory.buildNewEntityAsJSON(), Matchers.equalTo("["+jsonRequestFactory.buildExistingEntityAsJSON()+"]")));
 		
 		String entity2Id = addToStartingId(2);
-		String newValue = anUpdateEntityParamMap.get(changedFieldName);
+		Object newValue = anUpdateEntityParamMap.get(changedFieldName);
 		jsonRequestFactory.setEntityParam(changedFieldName, newValue);
 		jsonRequestFactory.setId(entity2Id);
 		T enity2Existing = jsonRequestFactory.buildExistingEntity();

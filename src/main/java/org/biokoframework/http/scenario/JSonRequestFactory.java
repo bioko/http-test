@@ -45,7 +45,7 @@ public class JSonRequestFactory<T extends DomainEntity> {
 		return this;
 	}
 
-	public JSonRequestFactory<T> setEntityParam(String builderMethodName, String parameterValue) throws Exception {
+	public JSonRequestFactory<T> setEntityParam(String builderMethodName, Object parameterValue) throws Exception {
 		_entityBuilder.set(builderMethodName, parameterValue);
 		return this;
 	}
