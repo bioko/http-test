@@ -48,7 +48,6 @@ public class MatchesSubjectAndContent extends TypeSafeMatcher<Message> {
 		_contentMatcher = contentMatcher;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void describeTo(Description description) {
 		description.appendList("(", " " + "and" + " ", ")", 

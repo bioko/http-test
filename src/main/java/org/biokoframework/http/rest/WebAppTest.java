@@ -27,6 +27,7 @@
 
 package org.biokoframework.http.rest;
 
+import java.net.URI;
 import java.util.EnumSet;
 
 import javax.servlet.DispatcherType;
@@ -41,15 +42,20 @@ import com.google.inject.servlet.GuiceServletContextListener;
 public abstract class WebAppTest {
 	
 	private Server _server;
-	private int _port;
+	private URI _uri;
 
 	public void init() throws Exception {
 		init(0);
 	}
 	
 	public void init(int port) throws Exception {
-		_server = new Server(port);
+//		_server = new Server(port);
+//		ServletContextHandler handler = new ServletContextHandler(_server, "/", ServletContextHandler.SESSIONS);
+//		handler.addFilter(GuiceFilter.class, "/*", EnumSet.allOf(DispatcherType.class));
+//		handler.addEventListener(getServletConfig());
+//		handler.addServlet(DefaultServlet.class, "/");
 		
+		_server = new Server(port);
 		ServletContextHandler handler = new ServletContextHandler(_server, "/", ServletContextHandler.SESSIONS);
 		handler.addFilter(GuiceFilter.class, "/*", EnumSet.allOf(DispatcherType.class));
 		handler.addEventListener(getServletConfig());
@@ -57,13 +63,13 @@ public abstract class WebAppTest {
 
 	}
 
-	public int getPort() {
-		return _port;
+	public URI getURI() {
+		return _uri;
 	}
 	
 	public void start() throws Exception {
 		_server.start();
-		_port = _server.getConnectors()[0].getLocalPort();
+		_uri = _server.getURI();
 	}
 	
 	public void stop() throws Exception {
