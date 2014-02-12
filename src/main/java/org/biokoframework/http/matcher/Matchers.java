@@ -50,10 +50,6 @@ public class Matchers {
 		return MatchesSubjectAndContent.matchesSubjectAndContent(equalTo(expectedSubject), equalTo(expectedContent));
 	}
 	
-	public static <T> Matcher<String> equalToExcludingKey(String json, String aKey) {
-		return new SubstituteBothJsonKeyMatcher(json, aKey);
-	}
-
 	public static <T> Matcher<T> exists() {
 		return Exists.exists();
 	}

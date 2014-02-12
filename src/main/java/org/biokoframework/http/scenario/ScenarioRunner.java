@@ -48,14 +48,14 @@ import org.biokoframework.http.HttpMethodEnum;
 import org.biokoframework.http.scenario.mail.MailScenarioStep;
 import org.biokoframework.http.scenario.push.PushScenarioStep;
 import org.biokoframework.system.KILL_ME.commons.HttpMethod;
-import org.biokoframework.system.service.push.impl.TestNotificationImplementation;
+import org.biokoframework.system.services.push.impl.TestPushNotificationService;
 import org.hamcrest.Matcher;
 import org.hamcrest.core.IsCollectionContaining;
 import org.jvnet.mock_javamail.Mailbox;
 
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.specification.RequestSpecification;
-
+ 
 public class ScenarioRunner {
 
 	private Scenario _scenarioCollector;
@@ -103,7 +103,7 @@ public class ScenarioRunner {
 	}
 	
 	private String scenarioExecution(PushScenarioStep pushScenario) {
-		List<String> pushMessages = TestNotificationImplementation.getMessagesForUser(pushScenario._userToken);
+		List<String> pushMessages = TestPushNotificationService.getMessagesForUser(pushScenario._userToken);
 		assertThat(pushMessages, IsCollectionContaining.<String>hasItem(pushScenario._messageMatcher));		
 		for (Iterator<String> it = pushMessages.iterator(); it.hasNext();) {
 			String aMessage = it.next();
@@ -149,14 +149,14 @@ public class ScenarioRunner {
 	
 	
 	public void test(String baseUrl, HttpScenarioStep httpScenario) {
-		System.out.println("\tURL: " + httpScenario._partialRestURL);
-		System.out.println("\tHTTP Method: " + httpScenario._httpMethod);
-		System.out.println("\tHeaders: " + httpScenario._headers);
-		System.out.println("\tParameters: " + httpScenario._parameters);
-		System.out.println("\tBody:" + httpScenario._requestBodyJson);
+		System.out.println("\tURL: " + httpScenario.fPartialRestURL);
+		System.out.println("\tHTTP Method: " + httpScenario.fHttpMethod);
+		System.out.println("\tHeaders: " + httpScenario.fHeaders);
+		System.out.println("\tParameters: " + httpScenario.fParameters);
+		System.out.println("\tBody:" + httpScenario.fRequestBodyJson);
 		System.out.println("\t------ EXPECTATION -------");
-		System.out.println("\tExpected Http Status Code:" + httpScenario._expectedHttpStatusCode);
-		System.out.println("\tExpected Body Response:\n\t" + prettify(httpScenario._expectedJsonBodyMatcher));
+		System.out.println("\tExpected Http Status Code:" + httpScenario.fExpectedHttpStatusCode);
+		System.out.println("\tExpected Body Response:\n\t" + prettify(httpScenario.fExpectedJsonBodyMatcher));
 		Response scenarioExecutionResponse = scenarioExecution(httpScenario, baseUrl);
 		System.out.println("\t------ RESPONSE -------");
 		System.out.println("\t" + scenarioExecutionResponse.asString());
@@ -226,7 +226,7 @@ public class ScenarioRunner {
 	
 
 	private Response scenarioExecution(HttpScenarioStep httpScenario, String baseUrl) {
-		switch (HttpMethodEnum.valueOf(httpScenario._httpMethod)) {
+		switch (HttpMethodEnum.valueOf(httpScenario.fHttpMethod)) {
 		case GET :
 			return executeGet(httpScenario, baseUrl);
 		case POST :
@@ -243,88 +243,88 @@ public class ScenarioRunner {
 
 	public Response executeDelete(HttpScenarioStep httpScenario, String baseUrl) {
 		return expect().
-		statusCode(httpScenario._expectedHttpStatusCode).
-		body(httpScenario._expectedJsonBodyMatcher).
+		statusCode(httpScenario.fExpectedHttpStatusCode).
+		body(httpScenario.fExpectedJsonBodyMatcher).
 		when().
 		given().
 		log().
 		body().
 		request().
-		headers(httpScenario._headers).
-		parameters(httpScenario._parameters).
-		delete(baseUrl + httpScenario._partialRestURL);
+		headers(httpScenario.fHeaders).
+		parameters(httpScenario.fParameters).
+		delete(baseUrl + httpScenario.fPartialRestURL);
 	}
 
 	public Response executePut(HttpScenarioStep httpScenario, String baseUrl) {
 		return expect().
-		statusCode(httpScenario._expectedHttpStatusCode).
-		body(httpScenario._expectedJsonBodyMatcher).
+		statusCode(httpScenario.fExpectedHttpStatusCode).
+		body(httpScenario.fExpectedJsonBodyMatcher).
 		when().
 		given().
 		log().
 		body().
 		request().
-		headers(httpScenario._headers).
-		parameters(httpScenario._parameters).
-		body(httpScenario._requestBodyJson).
-		put(baseUrl + httpScenario._partialRestURL);
+		headers(httpScenario.fHeaders).
+		parameters(httpScenario.fParameters).
+		body(httpScenario.fRequestBodyJson).
+		put(baseUrl + httpScenario.fPartialRestURL);
 	}
 
 	public Response executePost(HttpScenarioStep httpScenario, String baseUrl) {
-		if (httpScenario._requestBodyJson != null) {
+		if (httpScenario.fRequestBodyJson != null) {
 			return expect().
-			statusCode(httpScenario._expectedHttpStatusCode).
+			statusCode(httpScenario.fExpectedHttpStatusCode).
 			body(httpScenario.bodyMatcher()).
 			when().
 			given().
 			log().
 			body().
 			request().
-			headers(httpScenario._headers).
-			queryParameters(httpScenario._parameters).
-			body(httpScenario._requestBodyJson).
-			post(baseUrl + httpScenario._partialRestURL);
+			headers(httpScenario.fHeaders).
+			queryParameters(httpScenario.fParameters).
+			body(httpScenario.fRequestBodyJson).
+			post(baseUrl + httpScenario.fPartialRestURL);
 		} else {
 			return expect().
-			statusCode(httpScenario._expectedHttpStatusCode).
+			statusCode(httpScenario.fExpectedHttpStatusCode).
 			body(httpScenario.bodyMatcher()).
 			when().
 			given().
 			log().
 			body().
 			request().
-			headers(httpScenario._headers).
-			queryParameters(httpScenario._parameters).
-			post(baseUrl + httpScenario._partialRestURL);
+			headers(httpScenario.fHeaders).
+			queryParameters(httpScenario.fParameters).
+			post(baseUrl + httpScenario.fPartialRestURL);
 		}
 	}
 
 	public Response executeGet(HttpScenarioStep httpScenario, String baseUrl) {
 		return expect().
-		statusCode(httpScenario._expectedHttpStatusCode).
-		body(httpScenario._expectedJsonBodyMatcher).
+		statusCode(httpScenario.fExpectedHttpStatusCode).
+		body(httpScenario.fExpectedJsonBodyMatcher).
 		when().
 		given().
 		log().
 		body().
 		request().
-		headers(httpScenario._headers).
-		parameters(httpScenario._parameters).
-		get(baseUrl + httpScenario._partialRestURL);
+		headers(httpScenario.fHeaders).
+		parameters(httpScenario.fParameters).
+		get(baseUrl + httpScenario.fPartialRestURL);
 	}
 	
 	public Response executeOptions(HttpScenarioStep httpScenario, String baseUrl) {
 		return expect().
-		statusCode(httpScenario._expectedHttpStatusCode).
-		body(httpScenario._expectedJsonBodyMatcher).
+		statusCode(httpScenario.fExpectedHttpStatusCode).
+		body(httpScenario.fExpectedJsonBodyMatcher).
 		when().
 		given().
 		log().
 		body().
 		request().
-		headers(httpScenario._headers).
-		parameters(httpScenario._parameters).
-		options(baseUrl + httpScenario._partialRestURL);
+		headers(httpScenario.fHeaders).
+		parameters(httpScenario.fParameters).
+		options(baseUrl + httpScenario.fPartialRestURL);
 	}
 	
 	public void test(String baseUrl, HttpScenarioStepBinary binaryScenario) {

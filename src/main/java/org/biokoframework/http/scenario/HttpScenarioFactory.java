@@ -35,12 +35,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.biokoframework.http.HttpMethodEnum;
-import org.biokoframework.http.matcher.SubstituteBothJsonKeyMatcher;
 import org.biokoframework.http.rest.exception.HttpError;
 import org.biokoframework.system.entity.EntityClassNameTranslator;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.EntityBuilder;
-import org.biokoframework.utils.domain.reflection.DomainEntityReflection;
 import org.biokoframework.utils.fields.Fields;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
@@ -174,7 +172,7 @@ public class HttpScenarioFactory<T extends DomainEntity> {
 	}
 	
 	public Scenario scenarioAsCollector(Class<T> entityClass, HttpScenarioStep aScenario) throws Exception {
-		Scenario scenarioCollector = new Scenario(aScenario._httpMethod + " Single Collection On " + entityClass.getSimpleName() + " " );
+		Scenario scenarioCollector = new Scenario(aScenario.fHttpMethod + " Single Collection On " + entityClass.getSimpleName() + " " );
 		scenarioCollector.addScenarioStep("singleScenario", aScenario);
 		return scenarioCollector;
 	}
@@ -234,13 +232,7 @@ public class HttpScenarioFactory<T extends DomainEntity> {
 		scenarioCollector.addScenarioStep("second post " + entityName, postFailed(restURL, null, null, newEntityRequest, alreadyExisting.status(), Matchers.equalTo(JSONValue.toJSONString(alreadyExisting.body()))));
 		return scenarioCollector;
 	}
-	
-	public static Matcher<String> substituteBothJsonKeyMatcher(Class<? extends DomainEntity> anEntityClass, String startingId) {
-		String keyName = DomainEntityReflection.keyNameInvocation((anEntityClass));
-		Matcher<String> bodyExcludingIdMatcher = SubstituteBothJsonKeyMatcher.equalToExcludingKey(JSonExpectedResponseBuilder.existingEntity(anEntityClass, startingId), keyName);
-		return bodyExcludingIdMatcher;
-	}
-	
+		
 	public Scenario readAllFilteredScenarioCollector(Class<T> entityClass, Map<String, Object> anUpdateEntityParamMap, HashMap<String, String> queryString) throws Exception {
 		String entityName = EntityClassNameTranslator.toHyphened(entityClass.getSimpleName());
 		String restURL = entityName + "/";

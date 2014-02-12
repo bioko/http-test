@@ -68,10 +68,10 @@ public class OnlyGetScenarioFactory {
 
 	private static HttpScenarioStep adaptToOnlyGet(HttpScenarioStep restScenario) throws Exception {
 				
-		HashMap<String, String> parameters = new HashMap<String, String>(restScenario._parameters);
-		parameters.putAll(restScenario._headers);
+		HashMap<String, String> parameters = new HashMap<String, String>(restScenario.fParameters);
+		parameters.putAll(restScenario.fHeaders);
 		
-		String[] restUrlSplit = restScenario._partialRestURL.split("/");
+		String[] restUrlSplit = restScenario.fPartialRestURL.split("/");
 		String entityHyphened;
 		if (restUrlSplit[restUrlSplit.length - 1].matches("\\d+")) {
 			entityHyphened = (restUrlSplit[restUrlSplit.length - 2]);
@@ -81,18 +81,18 @@ public class OnlyGetScenarioFactory {
 		}
 		
 		String command = new StringBuilder(). 
-				append(restScenario._httpMethod).
+				append(restScenario.fHttpMethod).
 				append('_').
 				append(entityHyphened).
 				toString();
 		parameters.put(GenericFieldNames.COMMAND, command);
 		
-		if (restScenario._requestBodyJson != null && !restScenario._requestBodyJson.isEmpty()) {
-			parameters.putAll(parseBody(restScenario._requestBodyJson));
+		if (restScenario.fRequestBodyJson != null && !restScenario.fRequestBodyJson.isEmpty()) {
+			parameters.putAll(parseBody(restScenario.fRequestBodyJson));
 		}
 
 		HttpScenarioStep onlyGetScenario = new HttpScenarioStep(ONLY_GET, HttpMethod.GET.name(), null,
-				parameters, null, restScenario._expectedHttpStatusCode, restScenario._expectedJsonBodyMatcher);
+				parameters, null, restScenario.fExpectedHttpStatusCode, restScenario.fExpectedJsonBodyMatcher);
 		
 		return onlyGetScenario;
 	}
