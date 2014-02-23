@@ -32,6 +32,10 @@ import java.util.EnumSet;
 
 import javax.servlet.DispatcherType;
 
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -41,39 +45,36 @@ import com.google.inject.servlet.GuiceServletContextListener;
 
 public abstract class WebAppTest {
 	
-	private Server _server;
-	private URI _uri;
+	private Server fServer;
+	private URI fUri;
 
 	public void init() throws Exception {
 		init(0);
 	}
 	
 	public void init(int port) throws Exception {
-//		_server = new Server(port);
-//		ServletContextHandler handler = new ServletContextHandler(_server, "/", ServletContextHandler.SESSIONS);
-//		handler.addFilter(GuiceFilter.class, "/*", EnumSet.allOf(DispatcherType.class));
-//		handler.addEventListener(getServletConfig());
-//		handler.addServlet(DefaultServlet.class, "/");
-		
-		_server = new Server(port);
-		ServletContextHandler handler = new ServletContextHandler(_server, "/", ServletContextHandler.SESSIONS);
+		fServer = new Server(port);
+		ServletContextHandler handler = new ServletContextHandler(fServer, "/", ServletContextHandler.SESSIONS);
 		handler.addFilter(GuiceFilter.class, "/*", EnumSet.allOf(DispatcherType.class));
 		handler.addEventListener(getServletConfig());
 		handler.addServlet(DefaultServlet.class, "/");
-
+		
+		ConsoleAppender console = new ConsoleAppender(new PatternLayout("[%d] [%t] [%p] [%F:%L] : %m%n"));
+		console.setThreshold(Level.INFO);
+		Logger.getRootLogger().addAppender(console);
 	}
-
+	
 	public URI getURI() {
-		return _uri;
+		return fUri;
 	}
 	
 	public void start() throws Exception {
-		_server.start();
-		_uri = _server.getURI();
+		fServer.start();
+		fUri = fServer.getURI();
 	}
 	
 	public void stop() throws Exception {
-		_server.stop();
+		fServer.stop();
 	}
 
 	/**

@@ -137,20 +137,20 @@ public class JSonExpectedResponseBuilder<T extends DomainEntity> {
 	}
 	
 	public static HttpError authenticationRequired() {
-		CommandException authenticationRequired = CommandExceptionsFactory.createTokenNotFoundException();
+		SystemException authenticationRequired = CommandExceptionsFactory.createTokenNotFoundException();
 		HttpResponseBuilder responseBuilder = new HttpResponseBuilder(HttpResponseExceptionFactory.create());
 		return responseBuilder.buildFrom(authenticationRequired);
 		
 	}
 	
 	public static HttpError  insufficientPrivileges() {
-		CommandException insufficientPrivileges = CommandExceptionsFactory.createInsufficientPrivilegesException();
+		SystemException insufficientPrivileges = CommandExceptionsFactory.createInsufficientPrivilegesException();
 		HttpResponseBuilder httpResponseBuilder = new HttpResponseBuilder(HttpResponseExceptionFactory.create());
 		return httpResponseBuilder.buildFrom(insufficientPrivileges);
 	}
 	
 	public static HttpError invalidLogin() {
-		CommandException invalidLogin = CommandExceptionsFactory.createInvalidLoginException();
+		SystemException invalidLogin = CommandExceptionsFactory.createInvalidLoginException();
 		HttpResponseBuilder httpResponseBuilder = new HttpResponseBuilder(HttpResponseExceptionFactory.create());
 		return httpResponseBuilder.buildFrom(invalidLogin);
 	}
