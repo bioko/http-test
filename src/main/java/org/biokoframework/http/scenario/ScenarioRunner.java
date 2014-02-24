@@ -53,6 +53,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.core.IsCollectionContaining;
 import org.jvnet.mock_javamail.Mailbox;
 
+import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.specification.RequestSpecification;
  
@@ -264,6 +265,7 @@ public class ScenarioRunner {
 		log().
 		body().
 		request().
+		contentType(ContentType.JSON).
 		headers(httpScenario.fHeaders).
 		parameters(httpScenario.fParameters).
 		body(httpScenario.fRequestBodyJson).
@@ -280,6 +282,7 @@ public class ScenarioRunner {
 			log().
 			body().
 			request().
+			contentType(ContentType.JSON).
 			headers(httpScenario.fHeaders).
 			queryParameters(httpScenario.fParameters).
 			body(httpScenario.fRequestBodyJson).
