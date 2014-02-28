@@ -51,6 +51,10 @@ public final class HttpScenarioStep implements ScenarioStep {
 				fHttpMethod = httpMethod;
 				
 				fHeaders = (headers == null) ? fHeaders = new HashMap<String, String>() : headers;
+				if (!fHeaders.containsKey("Accept")) {
+					fHeaders.put("Accept", "application/json");
+				}
+				
 				fParameters = (parameters == null) ? fParameters = new HashMap<String, String>() : parameters;
 
 				fRequestBodyJson = requestBodyJson;

@@ -83,7 +83,7 @@ public class CrudScenariosParametrizedFactory {
 				{
 						entityName + " update - PUT - failed",
 						scenarioFactory.scenarioAsCollector(anEntityClass, HttpScenarioFactory.putFailed(composeEntitySpecificURL(anEntityClass, startingId),
-								null, null, "", entityNotComplete.status(), anyString())) },
+								null, null, "", entityNotFound.status(), anyString())) },
 				{
 						entityName + " delete - DELETE - failed",
 						scenarioFactory.scenarioAsCollector(
