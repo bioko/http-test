@@ -62,6 +62,10 @@ public abstract class WebAppTest {
 		ConsoleAppender console = new ConsoleAppender(new PatternLayout("[%d] [%t] [%p] [%F:%L] : %m%n"));
 		console.setThreshold(Level.INFO);
 		Logger.getRootLogger().addAppender(console);
+		
+		ConsoleAppender errorConsole = new ConsoleAppender(new PatternLayout("[%d] [%t] [%p] [%F:%L] : %m%n"), "System.err");
+		errorConsole.setThreshold(Level.ERROR);
+		Logger.getRootLogger().addAppender(errorConsole);
 	}
 	
 	public URI getURI() {
