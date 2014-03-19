@@ -58,7 +58,7 @@ public abstract class WebAppTest {
 		handler.addFilter(GuiceFilter.class, "/*", EnumSet.allOf(DispatcherType.class));
 		handler.addEventListener(getServletConfig());
 		handler.addServlet(DefaultServlet.class, "/");
-		
+
 		ConsoleAppender console = new ConsoleAppender(new PatternLayout("[%d] [%t] [%p] [%F:%L] : %m%n"));
 		console.setThreshold(Level.INFO);
 		Logger.getRootLogger().addAppender(console);
