@@ -27,11 +27,8 @@
 
 package org.biokoframework.http.rest;
 
-import java.net.URI;
-import java.util.EnumSet;
-
-import javax.servlet.DispatcherType;
-
+import com.google.inject.servlet.GuiceFilter;
+import com.google.inject.servlet.GuiceServletContextListener;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -40,8 +37,9 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 
-import com.google.inject.servlet.GuiceFilter;
-import com.google.inject.servlet.GuiceServletContextListener;
+import javax.servlet.DispatcherType;
+import java.net.URI;
+import java.util.EnumSet;
 
 public abstract class WebAppTest {
 	
