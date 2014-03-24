@@ -27,14 +27,15 @@
 
 package org.biokoframework.http.authentication;
 
-import static com.jayway.restassured.RestAssured.given;
-
+import com.jayway.restassured.http.ContentType;
 import org.biokoframework.system.entity.authentication.Authentication;
 import org.biokoframework.system.entity.authentication.AuthenticationBuilder;
 import org.biokoframework.system.entity.login.LoginBuilder;
 import org.biokoframework.utils.domain.EntityBuilder;
+import org.joda.time.DateTime;
+import org.joda.time.format.ISODateTimeFormat;
 
-import com.jayway.restassured.http.ContentType;
+import static com.jayway.restassured.RestAssured.given;
 
 public class AuthenticationUtils {
 
@@ -44,16 +45,17 @@ public class AuthenticationUtils {
 		_authenticationUrl = authenticationUrl;
 	}
 	
-	public long postValidToken(String validToken) {
-		long expire = System.currentTimeMillis() / 1000 + 300; // Expire after NOW
+	public DateTime postValidToken(String validToken) {
+
+		DateTime expire = new DateTime().plus(300 * 1000); // Expire after NOW
 		return postToken(validToken, expire);
 	}
 	
-	public long postToken(String token, long expire) {
+	public DateTime postToken(String token, DateTime expire) {
 		EntityBuilder<Authentication> authenticationBuilder = 
 				new AuthenticationBuilder().loadDefaultExample();
 		authenticationBuilder.set(Authentication.TOKEN, token);
-		authenticationBuilder.set(Authentication.TOKEN_EXPIRE, Long.toString(expire));
+		authenticationBuilder.set(Authentication.TOKEN_EXPIRE, ISODateTimeFormat.dateTimeNoMillis().print(expire));
 		
 		given().
 		contentType(ContentType.JSON).
