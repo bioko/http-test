@@ -27,43 +27,42 @@
 
 package org.biokoframework.http.matcher;
 
-import static org.biokoframework.utils.matcher.Matchers.matchesPattern;
-
-import java.util.Map;
-import java.util.regex.Pattern;
-
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
+import java.util.Map;
+import java.util.regex.Pattern;
+
+import static org.biokoframework.utils.matcher.Matchers.matchesPattern;
+
 public class MatchesAuthenticationResponse extends TypeSafeMatcher<String> {
 
-	private static final String EXPECTED_RESPONSE_PATTERN = "^\\[\\{\"authTokenExpire\":\\d+,(\"roles\":\"[a-z|]+?\",)?\"authToken\":\"([\\da-f\\-]+)\"\\}\\]$";
+	private static final String EXPECTED_RESPONSE_PATTERN =
+            "^\\[\\{\"authTokenExpire\":\"\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:Z|(?:\\+|-)\\d{2}:\\d{2})\"," +
+            "(?:\"roles\":\"[a-z|]+?\",)?" +
+            "\"authToken\":\"([\\da-f\\-]+)\"\\}\\]$";
 	
-	private Matcher<String> _actualMatcher = matchesPattern(EXPECTED_RESPONSE_PATTERN);
-	private final Map<String, String> _tokenMap;
+	private Matcher<String> fActualMatcher = matchesPattern(EXPECTED_RESPONSE_PATTERN);
+	private final Map<String, String> fTokenMap;
 
 	
 	public MatchesAuthenticationResponse(Map<String, String> tokenMap) {
-		_tokenMap = tokenMap;
+		fTokenMap = tokenMap;
 	}
 
 	@Override
 	public void describeTo(Description description) {
-		_actualMatcher.describeTo(description);
+		fActualMatcher.describeTo(description);
 	}
 
 	@Override
 	protected boolean matchesSafely(String item) {
-		if (_actualMatcher.matches(item)) {
+		if (fActualMatcher.matches(item)) {
 			java.util.regex.Matcher patternMatcher = Pattern.compile(EXPECTED_RESPONSE_PATTERN).matcher(item);
 			patternMatcher.find();
-			if (patternMatcher.groupCount() == 2) {
-				_tokenMap.put(GenericFieldNames.TOKEN_HEADER, patternMatcher.group(2));				
-			} else {
-				_tokenMap.put(GenericFieldNames.TOKEN_HEADER, patternMatcher.group(1));
-			}
+			fTokenMap.put(GenericFieldNames.TOKEN_HEADER, patternMatcher.group(1));
 			return true;
 		}
 		return false;
