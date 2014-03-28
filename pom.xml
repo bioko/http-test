@@ -4,6 +4,8 @@
 	<groupId>org.biokoframework</groupId>
 	<artifactId>http-test</artifactId>
 	<version>0.1-SNAPSHOT</version>
+    <name>Bioko Framework - HttpTest</name>
+    <url>http://biokoframework.org</url>
 	<dependencies>
 		<dependency>
 			<groupId>org.biokoframework</groupId>
@@ -83,6 +85,5 @@
 			</plugin>
 		</plugins>
 	</build>
-	<name>Bioko Framework</name>
-	<url>http://biokoframework.org</url>
+
 </project>
