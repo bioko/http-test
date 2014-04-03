@@ -27,13 +27,13 @@
 
 package org.biokoframework.http.scenario.mail;
 
-import static org.biokoframework.http.matcher.MatchesSubjectAndContent.matchesSubjectAndContent;
+import org.biokoframework.system.entity.template.Template;
 
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
-import org.biokoframework.system.entity.template.Template;
+import static org.biokoframework.http.matcher.MatchesSubjectAndContent.matchesSubjectAndContent;
 
 public class MailScenarioFactory {
 

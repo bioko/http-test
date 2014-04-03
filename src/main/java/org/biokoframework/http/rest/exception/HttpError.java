@@ -27,10 +27,10 @@
 
 package org.biokoframework.http.rest.exception;
 
+import org.biokoframework.utils.domain.ErrorEntity;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.biokoframework.utils.domain.ErrorEntity;
 
 @Deprecated
 public class HttpError {

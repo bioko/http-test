@@ -27,12 +27,12 @@
 
 package org.biokoframework.http;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.biokoframework.http.rest.WebAppTest;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.Fields;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public abstract class AbstractSystemServletInterfaceTest extends WebAppTest {

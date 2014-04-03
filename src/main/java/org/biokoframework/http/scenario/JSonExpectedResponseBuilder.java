@@ -28,10 +28,6 @@
 package org.biokoframework.http.scenario;
 
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import org.biokoframework.http.rest.exception.HttpError;
 import org.biokoframework.http.rest.exception.HttpResponseBuilder;
 import org.biokoframework.http.rest.exception.HttpResponseExceptionFactory;
@@ -47,6 +43,10 @@ import org.biokoframework.utils.fields.Fields;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 
 public class JSonExpectedResponseBuilder<T extends DomainEntity> {

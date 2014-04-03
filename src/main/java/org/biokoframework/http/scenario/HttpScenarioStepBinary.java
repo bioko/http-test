@@ -27,10 +27,10 @@
 
 package org.biokoframework.http.scenario;
 
+import org.hamcrest.Matcher;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import org.hamcrest.Matcher;
 
 public final class HttpScenarioStepBinary implements ScenarioStep {
 

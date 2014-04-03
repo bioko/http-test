@@ -27,9 +27,9 @@
 
 package org.biokoframework.http.rest.exception;
 
-import java.util.HashMap;
-
 import org.biokoframework.utils.exception.BiokoException;
+
+import java.util.HashMap;
 
 @Deprecated
 public class HttpResponseBuilder {

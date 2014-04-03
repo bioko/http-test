@@ -27,13 +27,6 @@
 
 package org.biokoframework.http.scenario;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.biokoframework.http.HttpMethodEnum;
 import org.biokoframework.http.rest.exception.HttpError;
 import org.biokoframework.system.entity.EntityClassNameTranslator;
@@ -43,6 +36,13 @@ import org.biokoframework.utils.fields.Fields;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.json.simple.JSONValue;
+
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class HttpScenarioFactory<T extends DomainEntity> {
 

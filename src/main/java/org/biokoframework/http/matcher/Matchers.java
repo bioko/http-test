@@ -27,14 +27,13 @@
 
 package org.biokoframework.http.matcher;
 
-import static org.hamcrest.Matchers.equalTo;
-
-import java.util.Map;
-
-import javax.mail.Message;
-
 import org.hamcrest.Matcher;
 import org.jvnet.mock_javamail.Mailbox;
+
+import javax.mail.Message;
+import java.util.Map;
+
+import static org.hamcrest.Matchers.equalTo;
 
 public class Matchers {
 	

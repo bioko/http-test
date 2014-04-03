@@ -27,22 +27,9 @@
 
 package org.biokoframework.http.scenario;
 
-import static com.jayway.restassured.RestAssured.expect;
-import static org.apache.commons.lang3.StringEscapeUtils.escapeJava;
-import static org.apache.commons.lang3.StringEscapeUtils.unescapeJava;
-import static org.biokoframework.http.matcher.Matchers.exists;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.fail;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map.Entry;
-
-import javax.mail.Message;
-
+import com.jayway.restassured.http.ContentType;
+import com.jayway.restassured.response.Response;
+import com.jayway.restassured.specification.RequestSpecification;
 import org.apache.commons.beanutils.MethodUtils;
 import org.biokoframework.http.HttpMethodEnum;
 import org.biokoframework.http.scenario.mail.MailScenarioStep;
@@ -53,9 +40,20 @@ import org.hamcrest.Matcher;
 import org.hamcrest.core.IsCollectionContaining;
 import org.jvnet.mock_javamail.Mailbox;
 
-import com.jayway.restassured.http.ContentType;
-import com.jayway.restassured.response.Response;
-import com.jayway.restassured.specification.RequestSpecification;
+import javax.mail.Message;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map.Entry;
+
+import static com.jayway.restassured.RestAssured.expect;
+import static org.apache.commons.lang3.StringEscapeUtils.escapeJava;
+import static org.apache.commons.lang3.StringEscapeUtils.unescapeJava;
+import static org.biokoframework.http.matcher.Matchers.exists;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.fail;
  
 public class ScenarioRunner {
 

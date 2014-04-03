@@ -27,11 +27,6 @@
 
 package org.biokoframework.http.scenario.parametrized;
 
-import static org.biokoframework.utils.matcher.Matchers.anyString;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import org.biokoframework.http.rest.exception.HttpError;
 import org.biokoframework.http.scenario.HttpScenarioFactory;
 import org.biokoframework.http.scenario.JSonExpectedResponseBuilder;
@@ -41,6 +36,11 @@ import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.EntityBuilder;
 import org.hamcrest.Matchers;
 import org.json.simple.JSONValue;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.biokoframework.utils.matcher.Matchers.anyString;
 
 public class CrudScenariosParametrizedFactory {
 

@@ -27,8 +27,6 @@
 
 package org.biokoframework.http.rest.exception;
 
-import java.util.HashMap;
-
 import org.biokoframework.system.KILL_ME.exception.CommandNotFoundException;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.entity.EntityNotFoundException;
@@ -37,6 +35,8 @@ import org.biokoframework.system.exceptions.EasterEggException;
 import org.biokoframework.system.services.authentication.AuthenticationFailureException;
 import org.biokoframework.utils.exception.BiokoException;
 import org.biokoframework.utils.exception.ValidationException;
+
+import java.util.HashMap;
 
 @Deprecated
 public class HttpResponseExceptionFactory {

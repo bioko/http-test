@@ -27,11 +27,11 @@
 
 package org.biokoframework.http.scenario;
 
+import org.hamcrest.Matcher;
+
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.hamcrest.Matcher;
 
 public class HttpMultipartScenarioStep implements ScenarioStep {
 	

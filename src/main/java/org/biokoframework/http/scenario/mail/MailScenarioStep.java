@@ -27,10 +27,10 @@
 
 package org.biokoframework.http.scenario.mail;
 
-import javax.mail.Message;
-
 import org.biokoframework.http.scenario.ScenarioStep;
 import org.hamcrest.Matcher;
+
+import javax.mail.Message;
 
 public final class MailScenarioStep implements ScenarioStep {
 

@@ -27,16 +27,15 @@
 
 package org.biokoframework.http.matcher;
 
-import static org.hamcrest.Matchers.equalTo;
-
-import java.util.Arrays;
-
-import javax.mail.Message;
-
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+
+import javax.mail.Message;
+import java.util.Arrays;
+
+import static org.hamcrest.Matchers.equalTo;
 
 public class MatchesSubjectAndContent extends TypeSafeMatcher<Message> {
 
