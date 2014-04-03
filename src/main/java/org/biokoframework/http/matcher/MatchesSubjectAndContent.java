@@ -40,18 +40,18 @@ import org.hamcrest.TypeSafeMatcher;
 
 public class MatchesSubjectAndContent extends TypeSafeMatcher<Message> {
 
-	private Matcher<String> _subjectMatcher;
-	private Matcher<String> _contentMatcher;
+	private Matcher<String> fSubjectMatcher;
+	private Matcher<String> fContentMatcher;
 
 	public MatchesSubjectAndContent(Matcher<String> subjectMatcher, Matcher<String> contentMatcher) {
-		_subjectMatcher = subjectMatcher;
-		_contentMatcher = contentMatcher;
+		fSubjectMatcher = subjectMatcher;
+		fContentMatcher = contentMatcher;
 	}
 
 	@Override
 	public void describeTo(Description description) {
 		description.appendList("(", " " + "and" + " ", ")", 
-				Arrays.asList(_subjectMatcher, _contentMatcher));
+				Arrays.asList(fSubjectMatcher, fContentMatcher));
 	}
 	
 	@Override
@@ -67,9 +67,9 @@ public class MatchesSubjectAndContent extends TypeSafeMatcher<Message> {
 	protected boolean matchesSafely(Message item) {
 
 		try {
-			if (!_subjectMatcher.matches(item.getSubject())) {
+			if (!fSubjectMatcher.matches(item.getSubject())) {
 				return false;
-			} else if (!_contentMatcher.matches(item.getContent())) {
+			} else if (!fContentMatcher.matches(item.getContent())) {
 				return false;
 			}
 		} catch (Exception e) {
