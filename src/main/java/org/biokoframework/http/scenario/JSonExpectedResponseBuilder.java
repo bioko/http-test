@@ -108,13 +108,13 @@ public class JSonExpectedResponseBuilder<T extends DomainEntity> {
 	
 	public static <T extends DomainEntity> HttpError entityNotFound(Class<T> entityClass, Class<? extends EntityBuilder<T>> entityClassBuilder, String entityId) {
 		HttpResponseBuilder httpResponseBuilder = new HttpResponseBuilder(HttpResponseExceptionFactory.create());
-		CommandException notFound = CommandExceptionsFactory.createEntityNotFound(entityClass.getSimpleName(), entityId);
+		CommandException notFound = CommandExceptionsFactory.createEntityNotFound(entityClass, entityId);
 		return httpResponseBuilder.buildFrom(notFound);
 	}
 	
 	public static <T extends DomainEntity> HttpError entityNotFound(Class<T> entityClass, String fieldName, String fieldValue) {
 		HttpResponseBuilder httpResponseBuilder = new HttpResponseBuilder(HttpResponseExceptionFactory.create());
-		CommandException notFound = CommandExceptionsFactory.createEntityNotFound(entityClass.getSimpleName(), fieldName, fieldValue);
+		CommandException notFound = CommandExceptionsFactory.createEntityNotFound(entityClass, fieldName, fieldValue);
 		return httpResponseBuilder.buildFrom(notFound);
 	}
 
