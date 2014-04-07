@@ -37,7 +37,6 @@ import org.biokoframework.system.exceptions.CommandExceptionsFactory;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.EntityBuilder;
 import org.biokoframework.utils.domain.ErrorEntity;
-import org.biokoframework.utils.domain.reflection.DomainEntityReflection;
 import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.fields.Fields;
 import org.json.simple.JSONArray;
@@ -73,14 +72,8 @@ public class JSonExpectedResponseBuilder<T extends DomainEntity> {
 			.append(aJSON).append("]").toString();
 	}
 	
-	@SuppressWarnings("unchecked")
 	public static <T extends DomainEntity>  String existingEntity(Class<T> aClass, String anId) {
-//		Builder entityBuilder = (Builder)DomainEntityReflection.domainEntityBuilderInstance(aClass);
-		
-//		EntityBuilder<T> entityBuilder = (EntityBuilder<T>) DomainEntityReflection.domainEntityBuilderInstance(aClass);
-		Object reflectionEntityBuilder = DomainEntityReflection.domainEntityBuilderInstance(aClass);
-
-		EntityBuilder<T> entityBuilder = (EntityBuilder<T>) reflectionEntityBuilder;			
+		EntityBuilder<T> entityBuilder = DomainEntityReflection.domainEntityBuilderInstance(aClass);
 		DomainEntity input = entityBuilder.loadDefaultExample().setId(anId).build(true);		
 		return asJSONArray(input);
 	}
@@ -88,12 +81,7 @@ public class JSonExpectedResponseBuilder<T extends DomainEntity> {
 	
 	@SuppressWarnings("unchecked")
 	public JSonExpectedResponseBuilder<T> addExistingEntity(Class<T> aClass, String anId) throws Exception {
-//		Builder entityBuilder = (Builder)Class.forName(aClass.getName() + "Builder").getConstructor().newInstance();
-		
-//		EntityBuilder<T> entityBuilder = (EntityBuilder<T>)Class.forName(aClass.getName() + "Builder").getConstructor().newInstance();
-		Object reflectionEntityBuilder = Class.forName(aClass.getName() + "Builder").getConstructor().newInstance();
-		
-		EntityBuilder<T> entityBuilder = (EntityBuilder<T>) reflectionEntityBuilder;
+		EntityBuilder<T> entityBuilder = DomainEntityReflection.domainEntityBuilderInstance(aClass);
 		
 		DomainEntity input = entityBuilder.loadDefaultExample().setId(anId).build(true);
 		_hashtable.add(input);
