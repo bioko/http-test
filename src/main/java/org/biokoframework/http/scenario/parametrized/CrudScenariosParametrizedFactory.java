@@ -37,14 +37,16 @@ import org.biokoframework.utils.domain.EntityBuilder;
 import org.hamcrest.Matchers;
 import org.json.simple.JSONValue;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.biokoframework.utils.matcher.Matchers.anyString;
 
 public class CrudScenariosParametrizedFactory {
 
-	public static <T extends DomainEntity> Object[][] createFrom(Class<T> anEntityClass, Class<? extends EntityBuilder<T>> anEntityBuilderClass, Map<String, Object> anUpdateEntityMap, String startingId, String queryStringFieldsArray[]) throws Exception {
+	public static <T extends DomainEntity> List<Object[]> createFrom(Class<T> anEntityClass, Class<? extends EntityBuilder<T>> anEntityBuilderClass, Map<String, Object> anUpdateEntityMap, String startingId, String queryStringFieldsArray[]) throws Exception {
 		JSonRequestFactory<T> entityRequest = new JSonRequestFactory<T>().createEntity(anEntityClass);
 		String newEntityRequest = entityRequest.buildNewEntityAsJSON();
 		HttpError entityNotFound = JSonExpectedResponseBuilder.entityNotFound(anEntityClass, anEntityBuilderClass, startingId);
@@ -53,18 +55,18 @@ public class CrudScenariosParametrizedFactory {
 		HttpScenarioFactory<T> scenarioFactory = new HttpScenarioFactory<T>(startingId);
 		String entityName = anEntityClass.getSimpleName();
 
-		EntityBuilder<T> entityBuilder = (EntityBuilder<T>) anEntityBuilderClass.newInstance();
+		EntityBuilder<T> entityBuilder = anEntityBuilderClass.newInstance();
 
 		HashMap<String, String> queryString = null;
 		if (queryStringFieldsArray != null) {
-			queryString = new HashMap<String, String>();
+			queryString = new HashMap<>();
 			for (String qsField : queryStringFieldsArray) {
 				String qsValue = entityBuilder.loadDefaultExample().get(qsField);
 				queryString.put(qsField, qsValue);
 			}
 		}
 
-		return new Object[][] {
+		return Arrays.asList(new Object[][] {
 				{
 						entityName + " create - POST - successful",
 						scenarioFactory.scenarioAsCollector(anEntityClass, HttpScenarioFactory.postSuccessful(EntityClassNameTranslator.toHyphened(entityName)
@@ -103,10 +105,10 @@ public class CrudScenariosParametrizedFactory {
 				// TODO update failure ??? che tipo di put puo' fallire
 
 				{ entityName + " filtered getall - POST-1a, POST-1b, POST2, GET 1, GET 2 - successful",
-						scenarioFactory.readAllFilteredScenarioCollector(anEntityClass, anUpdateEntityMap, queryString) }, };
+						scenarioFactory.readAllFilteredScenarioCollector(anEntityClass, anUpdateEntityMap, queryString) }, });
 	}
 
-	public static <T extends DomainEntity> Object[][] createFrom(Class<T> anEntityClass, Class<? extends EntityBuilder<T>> anEntityBuilderClass, Map<String, Object> anUpdateEntityMap, String startingId) throws Exception {
+	public static <T extends DomainEntity> List<Object[]> createFrom(Class<T> anEntityClass, Class<? extends EntityBuilder<T>> anEntityBuilderClass, Map<String, Object> anUpdateEntityMap, String startingId) throws Exception {
 		return createFrom(anEntityClass, anEntityBuilderClass, anUpdateEntityMap, startingId, null);
 	}
 
