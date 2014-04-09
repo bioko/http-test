@@ -31,6 +31,7 @@ import org.biokoframework.http.rest.exception.HttpError;
 import org.biokoframework.http.scenario.HttpScenarioFactory;
 import org.biokoframework.http.scenario.JSonExpectedResponseBuilder;
 import org.biokoframework.http.scenario.JSonRequestFactory;
+import org.biokoframework.http.scenario.Scenario;
 import org.biokoframework.system.entity.EntityClassNameTranslator;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.EntityBuilder;
@@ -46,7 +47,7 @@ import static org.biokoframework.utils.matcher.Matchers.anyString;
 
 public class CrudScenariosParametrizedFactory {
 
-	public static <T extends DomainEntity> List<Object[]> createFrom(Class<T> anEntityClass, Class<? extends EntityBuilder<T>> anEntityBuilderClass, Map<String, Object> anUpdateEntityMap, String startingId, String queryStringFieldsArray[]) throws Exception {
+	public static <T extends DomainEntity> List<Scenario> createFrom(Class<T> anEntityClass, Class<? extends EntityBuilder<T>> anEntityBuilderClass, Map<String, Object> anUpdateEntityMap, String startingId, String queryStringFieldsArray[]) throws Exception {
 		JSonRequestFactory<T> entityRequest = new JSonRequestFactory<T>().createEntity(anEntityClass);
 		String newEntityRequest = entityRequest.buildNewEntityAsJSON();
 		HttpError entityNotFound = JSonExpectedResponseBuilder.entityNotFound(anEntityClass, anEntityBuilderClass, startingId);
@@ -66,36 +67,29 @@ public class CrudScenariosParametrizedFactory {
 			}
 		}
 
-		return Arrays.asList(new Object[][] {
-				{
-						entityName + " create - POST - successful",
-						scenarioFactory.scenarioAsCollector(anEntityClass, HttpScenarioFactory.postSuccessful(EntityClassNameTranslator.toHyphened(entityName)
-								+ "/", null, null, newEntityRequest, Matchers.equalTo(JSonExpectedResponseBuilder.existingEntity(anEntityClass, startingId)))) },
-				{ entityName + " read - POST, GET - successful", scenarioFactory.readScenarioCollector(anEntityClass, queryString) },
-				{ entityName + " update - POST, PUT, GET - successful", scenarioFactory.updateScenarioCollector(anEntityClass, anUpdateEntityMap, queryString) },
-				{ entityName + " delete - POST, DELETE, GET - successful",
-						scenarioFactory.deleteScenarioCollector(anEntityClass, anEntityBuilderClass, queryString) },
+		return Arrays.<Scenario>asList(
+				scenarioFactory.scenarioAsCollector(anEntityClass, HttpScenarioFactory.postSuccessful(EntityClassNameTranslator.toHyphened(entityName)
+				        + "/", null, null, newEntityRequest, Matchers.equalTo(JSonExpectedResponseBuilder.existingEntity(anEntityClass, startingId)))),
 
-				{
-						entityName + " read - GET - failed",
-						scenarioFactory.scenarioAsCollector(
-								anEntityClass,
+                scenarioFactory.readScenarioCollector(anEntityClass, queryString),
+
+				scenarioFactory.updateScenarioCollector(anEntityClass, anUpdateEntityMap, queryString),
+
+                scenarioFactory.deleteScenarioCollector(anEntityClass, anEntityBuilderClass, queryString),
+
+				scenarioFactory.scenarioAsCollector(anEntityClass,
 								HttpScenarioFactory.getFailed(composeEntitySpecificURL(anEntityClass, startingId), null, queryString, null,
-										entityNotFound.status(), Matchers.equalTo(JSONValue.toJSONString(entityNotFound.body())))) },
-				{
-						entityName + " update - PUT - failed",
-						scenarioFactory.scenarioAsCollector(anEntityClass, HttpScenarioFactory.putFailed(composeEntitySpecificURL(anEntityClass, startingId),
-								null, null, "", entityNotFound.status(), anyString())) },
-				{
-						entityName + " delete - DELETE - failed",
-						scenarioFactory.scenarioAsCollector(
-								anEntityClass,
+										entityNotFound.status(), Matchers.equalTo(JSONValue.toJSONString(entityNotFound.body())))),
+
+				scenarioFactory.scenarioAsCollector(anEntityClass, HttpScenarioFactory.putFailed(composeEntitySpecificURL(anEntityClass, startingId),
+								null, null, "", entityNotFound.status(), anyString())),
+
+				scenarioFactory.scenarioAsCollector(anEntityClass,
 								HttpScenarioFactory.deleteFailed(composeEntitySpecificURL(anEntityClass, startingId), null, queryString, null,
-										entityNotFound.status(), Matchers.equalTo(JSONValue.toJSONString(entityNotFound.body())))) },
+										entityNotFound.status(), Matchers.equalTo(JSONValue.toJSONString(entityNotFound.body())))),
 
 				// TODO casi con piu' di una entità ...
-				{ entityName + " readAll - POST-1, POST-2, GET - successful",
-						scenarioFactory.readAllScenarioCollector(anEntityClass, anUpdateEntityMap, queryString) },
+                scenarioFactory.readAllScenarioCollector(anEntityClass, anUpdateEntityMap, queryString),
 				// TODO post failure se esiste già una entità con gli stessi
 				// mandatory fields
 				// {entityName + " create - POST - already exixting - failed",
@@ -104,11 +98,10 @@ public class CrudScenariosParametrizedFactory {
 				// TODO post failure se non ci sono tutti i mandatory fields
 				// TODO update failure ??? che tipo di put puo' fallire
 
-				{ entityName + " filtered getall - POST-1a, POST-1b, POST2, GET 1, GET 2 - successful",
-						scenarioFactory.readAllFilteredScenarioCollector(anEntityClass, anUpdateEntityMap, queryString) }, });
+				scenarioFactory.readAllFilteredScenarioCollector(anEntityClass, anUpdateEntityMap, queryString));
 	}
 
-	public static <T extends DomainEntity> List<Object[]> createFrom(Class<T> anEntityClass, Class<? extends EntityBuilder<T>> anEntityBuilderClass, Map<String, Object> anUpdateEntityMap, String startingId) throws Exception {
+	public static <T extends DomainEntity> List<Scenario> createFrom(Class<T> anEntityClass, Class<? extends EntityBuilder<T>> anEntityBuilderClass, Map<String, Object> anUpdateEntityMap, String startingId) throws Exception {
 		return createFrom(anEntityClass, anEntityBuilderClass, anUpdateEntityMap, startingId, null);
 	}
 

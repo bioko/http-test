@@ -33,27 +33,32 @@ import java.util.Map.Entry;
 
 public class Scenario {
 
-	private String _scenarioName;
-	private ArrayList<Entry<String, ScenarioStep>> _scenarioSteps;
+	private String fScenarioName;
+	private ArrayList<Entry<String, ScenarioStep>> fScenarioSteps;
 
 	public Scenario(String scenarioName) {
-		_scenarioName = scenarioName;
-		_scenarioSteps = new ArrayList<Entry<String,ScenarioStep>>();
+		fScenarioName = scenarioName;
+		fScenarioSteps = new ArrayList<>();
 	}
 
 	public void addScenarioStep(String aScenarioStepName, ScenarioStep aScenarioStep) {
-		_scenarioSteps.add(new SimpleEntry<String, ScenarioStep>(aScenarioStepName, aScenarioStep));
+		fScenarioSteps.add(new SimpleEntry<>(aScenarioStepName, aScenarioStep));
 	}
 	
 	public void addScenario(Scenario aScenario) {
-		_scenarioSteps.addAll(aScenario._scenarioSteps);
+		fScenarioSteps.addAll(aScenario.fScenarioSteps);
 	}
 	
 	public ArrayList<Entry<String, ScenarioStep>> scenarioSteps() {
-		return _scenarioSteps;
+		return fScenarioSteps;
 	}
 	
 	public String scenarioName() {
-		return _scenarioName;
+		return fScenarioName;
 	}
+
+    @Override
+    public String toString() {
+        return scenarioName();
+    }
 }

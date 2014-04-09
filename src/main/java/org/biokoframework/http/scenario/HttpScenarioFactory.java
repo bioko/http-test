@@ -177,7 +177,7 @@ public class HttpScenarioFactory<T extends DomainEntity> {
 		return scenarioCollector;
 	}
 
-	public Object updateScenarioCollector(Class<T> entityClass, Map<String, Object> anUpdateEntityMap, HashMap<String, String> queryString) throws Exception {
+	public Scenario updateScenarioCollector(Class<T> entityClass, Map<String, Object> anUpdateEntityMap, HashMap<String, String> queryString) throws Exception {
 		String entityName = EntityClassNameTranslator.toHyphened(entityClass.getSimpleName());
 		String restURL = entityName + "/";
 		Scenario scenarioCollector = new Scenario("Update " + entityName + " (POST, PUT, GET) successful");
@@ -203,7 +203,7 @@ public class HttpScenarioFactory<T extends DomainEntity> {
 		return jsonRequestFactory;
 	}
 
-	public Object deleteScenarioCollector(Class<T> entityClass, Class<? extends EntityBuilder<T>> entityBuilderClass,  HashMap<String, String> queryString) throws Exception {
+	public Scenario deleteScenarioCollector(Class<T> entityClass, Class<? extends EntityBuilder<T>> entityBuilderClass,  HashMap<String, String> queryString) throws Exception {
 		String entityName = EntityClassNameTranslator.toHyphened(entityClass.getSimpleName());
 		String restURL = entityName + "/";
 		Scenario scenarioCollector = new Scenario("Delete " + entityName + " (POST, DELETE, GET) successful");
@@ -309,14 +309,14 @@ public class HttpScenarioFactory<T extends DomainEntity> {
 	}
 	
 	
-	public static List<Object[]> findScenarios(Class<?>... classes) throws Exception {
-		List<Object[]> found = new ArrayList<Object[]>();
+	public static List<Scenario> findScenarios(Class<?>... classes) throws Exception {
+		List<Scenario> found = new ArrayList<>();
 		
 		for (Class<?> aFactoryClass : classes) {
 			for (Method aFactoryMethod : aFactoryClass.getMethods()) {
 				if (aFactoryMethod.getReturnType().equals(Scenario.class)) {
 					Scenario collector = (Scenario) aFactoryMethod.invoke(null);
-					found.add(new Object[] { collector.scenarioName(), collector });
+					found.add(collector);
 				}
 			}
 		}
