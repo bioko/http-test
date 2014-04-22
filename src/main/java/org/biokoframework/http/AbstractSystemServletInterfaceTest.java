@@ -28,10 +28,12 @@
 package org.biokoframework.http;
 
 import org.biokoframework.http.rest.WebAppTest;
+import org.biokoframework.http.scenario.Scenario;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.Fields;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -61,4 +63,12 @@ public abstract class AbstractSystemServletInterfaceTest extends WebAppTest {
 	    entities.put("RESPONSE", entitiesList);
 		return entities;
 	}
+
+    protected static Collection<Object[]> toObjectArrayThingy(List<Scenario> scenarios) {
+        Collection<Object[]> collection = new ArrayList<>();
+        for (Scenario aScenario : scenarios) {
+            collection.add(new Object[] { aScenario });
+        }
+        return collection;
+    }
 }
