@@ -40,6 +40,10 @@ public class Matchers {
 	public static Matcher<String> matchesAuthenticationResponse(Map<String, String> tokenMap) {
 		return MatchesAuthenticationResponse.matchesAuthenticationResponse(tokenMap);
 	}
+
+    public static Matcher<String> matchesAuthenticationResponse() {
+        return MatchesAuthenticationResponse.matchesAuthenticationResponse();
+    }
 	
 	public static Matcher<Message> matchesSubjectAndContent(Matcher<String> subjectMatcher, Matcher<String> contentMatcher) {
 		return MatchesSubjectAndContent.matchesSubjectAndContent(subjectMatcher, contentMatcher);

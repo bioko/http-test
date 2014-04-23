@@ -60,9 +60,11 @@ public class MatchesAuthenticationResponse extends TypeSafeMatcher<String> {
 	@Override
 	protected boolean matchesSafely(String item) {
 		if (fActualMatcher.matches(item)) {
-			java.util.regex.Matcher patternMatcher = Pattern.compile(EXPECTED_RESPONSE_PATTERN).matcher(item);
-			patternMatcher.find();
-			fTokenMap.put(GenericFieldNames.TOKEN_HEADER, patternMatcher.group(1));
+            if (fTokenMap != null) {
+                java.util.regex.Matcher patternMatcher = Pattern.compile(EXPECTED_RESPONSE_PATTERN).matcher(item);
+                patternMatcher.find();
+                fTokenMap.put(GenericFieldNames.TOKEN_HEADER, patternMatcher.group(1));
+            }
 			return true;
 		}
 		return false;
@@ -71,5 +73,9 @@ public class MatchesAuthenticationResponse extends TypeSafeMatcher<String> {
 	public static Matcher<String> matchesAuthenticationResponse(Map<String, String> tokenMap) {
 		return new MatchesAuthenticationResponse(tokenMap);
 	}
+
+    public static Matcher<String> matchesAuthenticationResponse() {
+        return new MatchesAuthenticationResponse(null);
+    }
 
 }
