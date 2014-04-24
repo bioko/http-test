@@ -37,6 +37,7 @@ import org.biokoframework.http.scenario.push.PushScenarioStep;
 import org.biokoframework.system.KILL_ME.commons.HttpMethod;
 import org.biokoframework.system.services.push.impl.TestPushNotificationService;
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.hamcrest.core.IsCollectionContaining;
 import org.jvnet.mock_javamail.Mailbox;
 
@@ -53,20 +54,22 @@ import static org.apache.commons.lang3.StringEscapeUtils.escapeJava;
 import static org.apache.commons.lang3.StringEscapeUtils.unescapeJava;
 import static org.biokoframework.http.matcher.Matchers.exists;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.fail;
  
 public class ScenarioRunner {
 
-	private Scenario _scenarioCollector;
+	private Scenario fScenario;
 	
-	public ScenarioRunner(Scenario collector) {
-		_scenarioCollector = collector;
+	public ScenarioRunner(Scenario scenario) {
+		fScenario = scenario;
 		Mailbox.clearAll();
 	}
 	
 	public void test(String baseUrl) throws Exception {
-		System.out.println("=== SCENARIO COLLECTOR: " + _scenarioCollector.scenarioName());
-		for (Entry<String, ScenarioStep> eachScenario : _scenarioCollector.scenarioSteps()) {
+		System.out.println("=== SCENARIO COLLECTOR: " + fScenario.scenarioName());
+		for (Entry<String, ScenarioStep> eachScenario : fScenario.scenarioSteps()) {
 			System.out.println("\t------ SCENARIO: " + eachScenario.getKey() + " --------");
 			
 			// Polymorphic visitor?
@@ -75,7 +78,7 @@ public class ScenarioRunner {
 						new Object[] {baseUrl, eachScenario.getValue(), }, 
 						new Class[] {String.class, eachScenario.getValue().getClass()});
 			} catch (NoSuchMethodException exception) {				
-				fail("[EASY MAN] '"+_scenarioCollector.scenarioName()+"' not testable, probably wrong class");				
+				fail("[EASY MAN] '"+ fScenario.scenarioName()+"' not testable, probably wrong class");
 			} catch (InvocationTargetException exception) {
 				if (exception.getCause() != null) {
 					if (exception.getCause() instanceof Exception) {
@@ -128,7 +131,8 @@ public class ScenarioRunner {
 	private Message scenarioExecution(MailScenarioStep mailScenario) throws Exception {
 		Mailbox inspectedBox = Mailbox.get(mailScenario._mailBoxAddress);
 		assertThat(inspectedBox, exists());
-		assertThat(inspectedBox, IsCollectionContaining.<Message>hasItem(mailScenario._messageMatcher));
+        assertThat(inspectedBox, is(not(Matchers.<Message>empty())));
+		assertThat(inspectedBox, Matchers.<Message>hasItem(mailScenario._messageMatcher));
 		for (Iterator<Message> it = inspectedBox.iterator(); it.hasNext();) {
 			Message aMessage = it.next();
 			if (mailScenario._messageMatcher.matches(aMessage)) {
