@@ -27,13 +27,19 @@
 
 package org.biokoframework.http.scenario.mail;
 
+import org.biokoframework.http.scenario.ExecutionScenarioStep;
 import org.biokoframework.system.entity.template.Template;
+import org.hamcrest.Matcher;
+import org.jvnet.mock_javamail.Mailbox;
 
+import javax.mail.Message;
+import javax.mail.internet.AddressException;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 import static org.biokoframework.http.matcher.MatchesSubjectAndContent.matchesSubjectAndContent;
+import static org.junit.Assert.assertThat;
 
 public class MailScenarioFactory {
 
@@ -49,5 +55,19 @@ public class MailScenarioFactory {
 		
 		return new MailScenarioStep(address, matchesSubjectAndContent(title, html));
 	}
+
+    public static MailScenarioStep mailReceivedBy(String address, Matcher<Message> emailMatcher) {
+        return new MailScenarioStep(address, emailMatcher);
+    }
+
+    public static ExecutionScenarioStep mailBox(final String address, final Matcher<Mailbox> mailboxMatcher) {
+        return new ExecutionScenarioStep() {
+            @Override
+            public void execute() throws AddressException {
+                Mailbox box = Mailbox.get(address);
+                assertThat(box, mailboxMatcher);
+            }
+        };
+    }
 
 }

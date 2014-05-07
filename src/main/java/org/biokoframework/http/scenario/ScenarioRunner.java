@@ -145,7 +145,7 @@ public class ScenarioRunner {
 		return null;
 	}
 
-	public void test(String baseUrl, ExecutionScenarioStep executionScenario) {
+	public void test(String baseUrl, ExecutionScenarioStep executionScenario) throws Exception {
 		System.out.println("\tRunning ExecutionScenarioStep code");
 		executionScenario.execute();
 	}

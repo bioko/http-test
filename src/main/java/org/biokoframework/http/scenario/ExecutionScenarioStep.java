@@ -29,6 +29,6 @@ package org.biokoframework.http.scenario;
 
 public abstract class ExecutionScenarioStep implements ScenarioStep {
 
-	public abstract void execute();
+	public abstract void execute() throws Exception;
 
 }
