@@ -34,6 +34,7 @@ import org.jvnet.mock_javamail.Mailbox;
 
 import javax.mail.Message;
 import javax.mail.internet.AddressException;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
@@ -60,7 +61,7 @@ public class MailScenarioFactory {
         return new MailScenarioStep(address, emailMatcher);
     }
 
-    public static ExecutionScenarioStep mailBox(final String address, final Matcher<Mailbox> mailboxMatcher) {
+    public static ExecutionScenarioStep mailBox(final String address, final Matcher<Collection<? extends Message>> mailboxMatcher) {
         return new ExecutionScenarioStep() {
             @Override
             public void execute() throws AddressException {

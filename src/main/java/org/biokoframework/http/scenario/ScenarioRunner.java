@@ -131,7 +131,7 @@ public class ScenarioRunner {
 	private Message scenarioExecution(MailScenarioStep mailScenario) throws Exception {
 		Mailbox inspectedBox = Mailbox.get(mailScenario._mailBoxAddress);
 		assertThat(inspectedBox, exists());
-        assertThat(inspectedBox, is(not(Matchers.<Message>empty())));
+        assertThat("Mailbox does not contain mails", inspectedBox, is(not(Matchers.<Message>empty())));
 		assertThat(inspectedBox, Matchers.<Message>hasItem(mailScenario._messageMatcher));
 		for (Iterator<Message> it = inspectedBox.iterator(); it.hasNext();) {
 			Message aMessage = it.next();
