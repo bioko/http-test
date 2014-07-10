@@ -75,12 +75,7 @@ public class HttpScenarioFactory<T extends DomainEntity> {
 		String httpMethod = HttpMethodEnum.GET.name();
 		return successfulHttpMethodInvocation(restUrl, headers, queryString, inputBodyJson, expectedJsonBodyMatcher, httpMethod);
 	}
-	
-	public static HttpScenarioStep getSuccessful(String restUrl, Map<String, String> headers, Map<String, String> queryString, String inputBodyJson, Matcher<String> expectedJsonBodyMatcher, HashMap<String, String> keyCollector) throws Exception {
-		String httpMethod = HttpMethodEnum.GET.name();
-		return successfulHttpMethodInvocation(restUrl, headers, queryString, inputBodyJson, expectedJsonBodyMatcher, httpMethod, keyCollector);
-	}
-	
+
 	public static HttpScenarioStep getEmpty(String restUrl, Map<String, String> headers, Map<String, String> queryString, String inputBodyJson, Matcher<String> expectedJsonBodyMatcher) throws Exception {
 		String httpMethod = HttpMethodEnum.GET.name();
 		return successfulHttpMethodInvocation(restUrl, headers, queryString, inputBodyJson, expectedJsonBodyMatcher, httpMethod);
@@ -120,11 +115,10 @@ public class HttpScenarioFactory<T extends DomainEntity> {
 		int expectedHttpStatusCode = 200;
 		return new HttpScenarioStep(restUrl, httpMethod, headers, queryString, inputBodyJson, expectedHttpStatusCode, expectedJsonBodyMatcher);
 	}
-	
-	private static HttpScenarioStep successfulHttpMethodInvocation(String restUrl, Map<String, String> headers, Map<String, String> queryString, String inputBodyJson, Matcher<String> expectedJsonBodyMatcher, String httpMethod, HashMap<String, String> keyCollector) {
-		int expectedHttpStatusCode = 200;
-		return new HttpScenarioStep(restUrl, httpMethod, headers, queryString, inputBodyJson, expectedHttpStatusCode, expectedJsonBodyMatcher, keyCollector);
-	}
+
+    public static HttpScenarioStep call(String httpMethod, String restUrl, Map<String, String> headers, Map<String, String> queryString, String inputBodyJson, int expectedHttpStatusCode, Matcher<String> expectedJsonBodyMatcher, Map<String, Matcher<String>> expectedHeaders) {
+        return new HttpScenarioStep(restUrl, httpMethod, headers, queryString, inputBodyJson, expectedHttpStatusCode, expectedJsonBodyMatcher, expectedHeaders);
+    }
 
 	private static HttpScenarioStep failedHttpMethodInvocation(String restUrl, Map<String, String> headers, Map<String, String> queryString, String inputBodyJson, int expectedHttpStatusCode, Matcher<String> expectedJsonBodyMatcher, String httpMethod) {
 		return new HttpScenarioStep(restUrl, httpMethod, headers, queryString, inputBodyJson, expectedHttpStatusCode, expectedJsonBodyMatcher);
