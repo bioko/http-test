@@ -40,9 +40,11 @@ import static org.biokoframework.utils.matcher.Matchers.matchesPattern;
 public class MatchesAuthenticationResponse extends TypeSafeMatcher<String> {
 
 	private static final String EXPECTED_RESPONSE_PATTERN =
-            "^\\[\\{\"authTokenExpire\":\"\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:Z|(?:\\+|-)\\d{2}:\\d{2})\"," +
-            "(?:\"roles\":\"[a-z|]+?\",)?" +
-            "\"authToken\":\"([\\da-f\\-]+)\"\\}\\]$";
+            "^\\[\\{.*" +
+                    "\"authTokenExpire\":\"\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:Z|(?:\\+|-)\\d{2}:\\d{2})\"," +
+                    "(?:\"roles\":\"[a-z|]+?\",)?" +
+                    "\"authToken\":\"([\\da-f\\-]+)\"" +
+            ".*\\}\\]$";
 	
 	private Matcher<String> fActualMatcher = matchesPattern(EXPECTED_RESPONSE_PATTERN);
 	private final Map<String, String> fTokenMap;
