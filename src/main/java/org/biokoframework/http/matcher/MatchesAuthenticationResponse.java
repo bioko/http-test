@@ -36,34 +36,34 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import static org.biokoframework.utils.matcher.Matchers.matchesPattern;
+import static org.biokoframework.utils.matcher.Matchers.substringMatchesPattern;
 
 public class MatchesAuthenticationResponse extends TypeSafeMatcher<String> {
 
-	private static final String EXPECTED_RESPONSE_PATTERN =
-            "^\\[\\{.*" +
-                    "\"authTokenExpire\":\"\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:Z|(?:\\+|-)\\d{2}:\\d{2})\"," +
-                    "(?:\"roles\":\"[a-z|]+?\",)?" +
-                    "\"authToken\":\"([\\da-f\\-]+)\"" +
-            ".*\\}\\]$";
-	
-	private Matcher<String> fActualMatcher = matchesPattern(EXPECTED_RESPONSE_PATTERN);
+	private static final String EXPECTED_TOKEN_PATTERN = "\"authToken\":\"([\\da-f\\-]+)\"";
+	private static final String EXPECTED_TOKEN_EXPIRATION_PATTERN = "\"authTokenExpire\":\"\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:Z|(?:\\+|-)\\d{2}:\\d{2})\",";
+	private static final String EXPECTED_ROLES_PATTERN = "(?:\"roles\":\"[a-z|]+?\",)?";
+
 	private final Map<String, String> fTokenMap;
 
-	
+	private Matcher<String> fTokenMatcher = substringMatchesPattern(EXPECTED_TOKEN_PATTERN);
+	private Matcher<String> fExpirationMatcher = substringMatchesPattern(EXPECTED_TOKEN_EXPIRATION_PATTERN);
+	private Matcher<String> fRolesMatcher = substringMatchesPattern(EXPECTED_ROLES_PATTERN);
+
 	public MatchesAuthenticationResponse(Map<String, String> tokenMap) {
 		fTokenMap = tokenMap;
 	}
 
 	@Override
 	public void describeTo(Description description) {
-		fActualMatcher.describeTo(description);
+		fTokenMatcher.describeTo(description);
 	}
 
 	@Override
 	protected boolean matchesSafely(String item) {
-		if (fActualMatcher.matches(item)) {
+		if (fTokenMatcher.matches(item) && fExpirationMatcher.matches(item) && fRolesMatcher.matches(item)) {
             if (fTokenMap != null) {
-                java.util.regex.Matcher patternMatcher = Pattern.compile(EXPECTED_RESPONSE_PATTERN).matcher(item);
+                java.util.regex.Matcher patternMatcher = Pattern.compile(EXPECTED_TOKEN_PATTERN).matcher(item);
                 patternMatcher.find();
                 fTokenMap.put(GenericFieldNames.TOKEN_HEADER, patternMatcher.group(1));
             }
