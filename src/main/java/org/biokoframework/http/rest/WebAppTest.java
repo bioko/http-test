@@ -36,8 +36,10 @@ import org.apache.log4j.PatternLayout;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 
 import javax.servlet.DispatcherType;
+import javax.servlet.MultipartConfigElement;
 import java.net.URI;
 import java.util.EnumSet;
 
@@ -52,10 +54,14 @@ public abstract class WebAppTest {
 	
 	public void init(int port) throws Exception {
 		fServer = new Server(port);
-		ServletContextHandler handler = new ServletContextHandler(fServer, "/", ServletContextHandler.SESSIONS);
-		handler.addFilter(GuiceFilter.class, "/*", EnumSet.allOf(DispatcherType.class));
-		handler.addEventListener(getServletConfig());
-		handler.addServlet(DefaultServlet.class, "/");
+        ServletHolder sh = new ServletHolder(DefaultServlet.class);
+        sh.getRegistration().setMultipartConfig(new MultipartConfigElement("java.io.tmpdir"));
+
+        ServletContextHandler handler = new MultipartServletContext(fServer);
+        handler.addFilter(GuiceFilter.class, "/*", EnumSet.allOf(DispatcherType.class));
+        handler.addEventListener(getServletConfig());
+        handler.addServlet(sh, "/");
+
 
 		ConsoleAppender errorConsole = new ConsoleAppender(new PatternLayout("[%d] [%t] [%p] [%F:%L] : %m%n"), "System.err");
 		errorConsole.setThreshold(Level.ERROR);
@@ -87,5 +93,5 @@ public abstract class WebAppTest {
 	 * @return An instance of a subclass of {@link GuiceServletContextListener}
 	 */
 	protected abstract GuiceServletContextListener getServletConfig();
-	
+
 }

@@ -29,6 +29,7 @@ package org.biokoframework.http.scenario;
 
 import org.hamcrest.Matcher;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,40 +44,37 @@ public final class HttpScenarioStep implements ScenarioStep {
 	public int fExpectedHttpStatusCode;
 	public Matcher<String> fExpectedJsonBodyMatcher;
 	private String fEntityKey;
+    public Map<String, Matcher<String>> fExpectedHeadersMap;
 
-	public HttpScenarioStep(String restURL, String httpMethod,
+    public HttpScenarioStep(String restURL, String httpMethod,
 			Map<String, String> headers, Map<String, String> parameters,
 			String requestBodyJson, int expectedHttpStatusCode, Matcher<String> expectedJsonBodyMatcher) {
-				fPartialRestURL = restURL;
-				fHttpMethod = httpMethod;
-				
-				fHeaders = (headers == null) ? fHeaders = new HashMap<String, String>() : headers;
-				if (!fHeaders.containsKey("Accept")) {
-					fHeaders.put("Accept", "application/json");
-				}
-				
-				fParameters = (parameters == null) ? fParameters = new HashMap<String, String>() : parameters;
 
-				fRequestBodyJson = requestBodyJson;
-				fExpectedHttpStatusCode = expectedHttpStatusCode;
-				fExpectedJsonBodyMatcher = expectedJsonBodyMatcher;
-	}
-	
-	public HttpScenarioStep(String completeRestURL, String httpMethod,
-			Map<String, String> headers, Map<String, String> parameters,
-			String requestBodyJson, int expectedHttpStatusCode, Matcher<String> expectedJsonBodyMatcher, HashMap<String, String> keyCollector) {
-				fPartialRestURL = String.format(completeRestURL, keyCollector.get(0));
-				fHttpMethod = httpMethod;
-				
-				fHeaders = (headers == null) ? fHeaders = new HashMap<String, String>() : headers;
-				fParameters = (parameters == null) ? fParameters = new HashMap<String, String>() : parameters;
-
-				fRequestBodyJson = requestBodyJson;
-				fExpectedHttpStatusCode = expectedHttpStatusCode;
-				fExpectedJsonBodyMatcher = expectedJsonBodyMatcher;
+        this(restURL, httpMethod, headers, parameters, requestBodyJson, expectedHttpStatusCode, expectedJsonBodyMatcher, Collections.<String, Matcher<String>>emptyMap());
 	}
 
-	public void setEntityKey(String entityKey) {
+    public HttpScenarioStep(String restURL, String httpMethod,
+                            Map<String, String> headers, Map<String, String> parameters,
+                            String requestBodyJson, int expectedHttpStatusCode, Matcher<String> expectedJsonBodyMatcher, Map<String, Matcher<String>> expectedHeadersMatchers) {
+
+        fPartialRestURL = restURL;
+        fHttpMethod = httpMethod;
+
+        fHeaders = (headers == null) ? fHeaders = new HashMap<>() : headers;
+        if (!fHeaders.containsKey("Accept")) {
+            fHeaders.put("Accept", "application/json");
+        }
+
+        fParameters = (parameters == null) ? fParameters = new HashMap<>() : parameters;
+
+        fRequestBodyJson = requestBodyJson;
+        fExpectedHttpStatusCode = expectedHttpStatusCode;
+        fExpectedJsonBodyMatcher = expectedJsonBodyMatcher;
+
+        fExpectedHeadersMap = expectedHeadersMatchers;
+    }
+
+    public void setEntityKey(String entityKey) {
 		fEntityKey = entityKey;
 	}
 

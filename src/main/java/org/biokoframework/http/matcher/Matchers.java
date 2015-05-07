@@ -27,6 +27,8 @@
 
 package org.biokoframework.http.matcher;
 
+import com.google.common.collect.ImmutableMap;
+import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.hamcrest.Matcher;
 import org.jvnet.mock_javamail.Mailbox;
 
@@ -60,5 +62,16 @@ public class Matchers {
 	public static Matcher<Mailbox> hasUnreadMessages() {
 		return HasUnreadMessages.hasUnreadMessages();
 	}
-	
+
+
+    public static Matcher<String> matchesAndCaptureAuthToken(Map<String, String> fTokenMap) {
+        return CapturingAuthTokenMatcher.matchesAndCaptureAuthToken(fTokenMap);
+    }
+
+    public static Map<String, Matcher<String>> capturingAuthHeaders(Map<String, String> tokenMap) {
+        return new ImmutableMap.Builder<String, Matcher<String>>()
+                .put(GenericFieldNames.TOKEN_HEADER, matchesAndCaptureAuthToken(tokenMap))
+                .build();
+    }
+
 }

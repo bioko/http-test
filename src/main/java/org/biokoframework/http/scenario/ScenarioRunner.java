@@ -246,90 +246,94 @@ public class ScenarioRunner {
 
 	public Response executeDelete(HttpScenarioStep httpScenario, String baseUrl) {
 		return expect().
-		statusCode(httpScenario.fExpectedHttpStatusCode).
-		body(httpScenario.fExpectedJsonBodyMatcher).
-		when().
-		given().
-		log().
-		body().
-		request().
-		headers(httpScenario.fHeaders).
-		parameters(httpScenario.fParameters).
-		delete(baseUrl + httpScenario.fPartialRestURL);
+		        statusCode(httpScenario.fExpectedHttpStatusCode).
+                headers(httpScenario.fExpectedHeadersMap).
+                body(httpScenario.fExpectedJsonBodyMatcher).
+                when().
+                given().
+                log().
+                body().
+                request().
+                headers(httpScenario.fHeaders).
+                parameters(httpScenario.fParameters).
+                delete(baseUrl + httpScenario.fPartialRestURL);
 	}
 
 	public Response executePut(HttpScenarioStep httpScenario, String baseUrl) {
 		return expect().
-		statusCode(httpScenario.fExpectedHttpStatusCode).
-		body(httpScenario.fExpectedJsonBodyMatcher).
-		when().
-		given().
-		log().
-		body().
-		request().
-		contentType(ContentType.JSON).
-		headers(httpScenario.fHeaders).
-		parameters(httpScenario.fParameters).
-		body(httpScenario.fRequestBodyJson).
-		put(baseUrl + httpScenario.fPartialRestURL);
+		        statusCode(httpScenario.fExpectedHttpStatusCode).
+                headers(httpScenario.fExpectedHeadersMap).
+		        body(httpScenario.fExpectedJsonBodyMatcher).
+                when().
+                given().
+                log().
+                body().
+                request().
+                contentType(ContentType.JSON).
+                headers(httpScenario.fHeaders).
+                parameters(httpScenario.fParameters).
+                body(httpScenario.fRequestBodyJson).
+                put(baseUrl + httpScenario.fPartialRestURL);
 	}
 
 	public Response executePost(HttpScenarioStep httpScenario, String baseUrl) {
 		if (httpScenario.fRequestBodyJson != null) {
-			return expect().
-			statusCode(httpScenario.fExpectedHttpStatusCode).
-			body(httpScenario.bodyMatcher()).
-			when().
-			given().
-			log().
-			body().
-			request().
-			contentType(ContentType.JSON).
-			headers(httpScenario.fHeaders).
-			queryParameters(httpScenario.fParameters).
-			body(httpScenario.fRequestBodyJson).
-			post(baseUrl + httpScenario.fPartialRestURL);
+            return expect().
+                    statusCode(httpScenario.fExpectedHttpStatusCode).
+                    headers(httpScenario.fExpectedHeadersMap).
+                    body(httpScenario.bodyMatcher()).
+                    when().
+                    given().
+                    log().
+                    body().
+                    request().
+                    contentType(ContentType.JSON).
+                    headers(httpScenario.fHeaders).
+                    queryParameters(httpScenario.fParameters).
+                    body(httpScenario.fRequestBodyJson).
+                    post(baseUrl + httpScenario.fPartialRestURL);
 		} else {
 			return expect().
-			statusCode(httpScenario.fExpectedHttpStatusCode).
-			body(httpScenario.bodyMatcher()).
-			when().
-			given().
-			log().
-			body().
-			request().
-			headers(httpScenario.fHeaders).
-			queryParameters(httpScenario.fParameters).
-			post(baseUrl + httpScenario.fPartialRestURL);
+                    statusCode(httpScenario.fExpectedHttpStatusCode).
+                    headers(httpScenario.fExpectedHeadersMap).
+                    body(httpScenario.bodyMatcher()).
+                    when().
+                    given().
+                    log().
+                    body().
+                    request().
+                    headers(httpScenario.fHeaders).
+                    queryParameters(httpScenario.fParameters).
+                    post(baseUrl + httpScenario.fPartialRestURL);
 		}
 	}
 
 	public Response executeGet(HttpScenarioStep httpScenario, String baseUrl) {
 		return expect().
-		statusCode(httpScenario.fExpectedHttpStatusCode).
-		body(httpScenario.fExpectedJsonBodyMatcher).
-		when().
-		given().
-		log().
-		body().
-		request().
-		headers(httpScenario.fHeaders).
-		parameters(httpScenario.fParameters).
-		get(baseUrl + httpScenario.fPartialRestURL);
+                    statusCode(httpScenario.fExpectedHttpStatusCode).
+                    body(httpScenario.fExpectedJsonBodyMatcher).
+                    when().
+                    given().
+                    log().
+                    body().
+                    request().
+                    headers(httpScenario.fHeaders).
+                    parameters(httpScenario.fParameters).
+                    get(baseUrl + httpScenario.fPartialRestURL);
 	}
 	
 	public Response executeOptions(HttpScenarioStep httpScenario, String baseUrl) {
 		return expect().
-		statusCode(httpScenario.fExpectedHttpStatusCode).
-		body(httpScenario.fExpectedJsonBodyMatcher).
-		when().
-		given().
-		log().
-		body().
-		request().
-		headers(httpScenario.fHeaders).
-		parameters(httpScenario.fParameters).
-		options(baseUrl + httpScenario.fPartialRestURL);
+                    statusCode(httpScenario.fExpectedHttpStatusCode).
+                    body(httpScenario.fExpectedJsonBodyMatcher).
+                    when().
+                    given().
+                    log().
+                    body().
+                    request().
+                    headers(httpScenario.fHeaders).
+                    parameters(httpScenario.fParameters).
+                    options(baseUrl + httpScenario.fPartialRestURL);
 	}
 	
 	public void test(String baseUrl, HttpScenarioStepBinary binaryScenario) {
@@ -376,4 +380,24 @@ public class ScenarioRunner {
 				append(escapeJava(scenarioExecutionMessage.getContent().toString())).append("\")");
 		return builder.toString();
 	}
+
+    public void test(String baseUrl, BinaryRequestStep binaryScenarioStep) {
+        System.out.println("\tURL: " + binaryScenarioStep.fRestUrl);
+        System.out.println("\tHTTP Method: " + binaryScenarioStep.fHttpMethod);
+//        System.out.println("\tHeaders: " + binaryScenario.);
+        System.out.println("\tParameters: " + binaryScenarioStep.fParameters);
+        System.out.println("\t------ EXPECTATION -------");
+//        System.out.println("\tExpected Http Status Code:" + binaryScenario._expectedHttpStatusCode);
+        System.out.println("\tExpected Response Media Type:\n\t" + binaryScenarioStep.fExpectedContentType);
+        scenarioExecution(binaryScenarioStep, baseUrl);
+    }
+
+    private Response scenarioExecution(BinaryRequestStep binaryScenarioStep, String baseUrl) {
+        return expect().
+                statusCode(200).
+                contentType("application/pdf").
+                given().
+                parameters(binaryScenarioStep.fParameters).
+                get(baseUrl + binaryScenarioStep.fRestUrl);
+    }
 }
