@@ -395,7 +395,7 @@ public class ScenarioRunner {
     private Response scenarioExecution(BinaryRequestStep binaryScenarioStep, String baseUrl) {
         return expect().
                 statusCode(200).
-                contentType("application/pdf").
+                contentType(binaryScenarioStep.fExpectedContentType).
                 given().
                 parameters(binaryScenarioStep.fParameters).
                 get(baseUrl + binaryScenarioStep.fRestUrl);
