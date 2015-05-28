@@ -24,6 +24,11 @@ public class BinaryRequestStep implements ScenarioStep {
 //        fHeaders = headers;
         fParameters = parameters;
         fExpectedContentType = expectedContentType;
-        fByteArray = IOUtils.toByteArray(getClass().getResource("/" + filename));
+
+        if (filename != null) {
+            fByteArray = IOUtils.toByteArray(getClass().getResource("/" + filename));
+        } else {
+            fByteArray = null;
+        }
     }
 }
